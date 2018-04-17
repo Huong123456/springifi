@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ifi.domain.Student;
 import com.ifi.domain.Subj;
+import com.ifi.repository.StudentRepository;
 import com.ifi.service.StudentService;
 import com.ifi.service.SubService;
 
@@ -28,6 +29,9 @@ public class StudentController {
 	@Autowired
 	private SubService subService;
 	
+	@Autowired
+	StudentRepository strepo;
+	
 	
 
     @GetMapping("/student")
@@ -39,7 +43,7 @@ public class StudentController {
     @GetMapping("/sub")
     public String index1(Model model) {
     	model.addAttribute("subs", subService.findAll());
-    	return "list_monhoc";
+    	return "dangki";
     }
     
     
@@ -92,6 +96,9 @@ public class StudentController {
     	studentService.save(st);
     	return "redirect:/student/"+id+"/dangki";
     }
+ 
+ 
+ 
     
     
     
@@ -119,6 +126,7 @@ public class StudentController {
     @GetMapping("/student/{id}/delete")
     public String delete(@PathVariable int id, RedirectAttributes redirect) {
     	studentService.delete(id);
+    	//strepo.delete(id);
         redirect.addFlashAttribute("success", "Deleted student successfully!");
         return "redirect:/student";
      }
@@ -141,6 +149,24 @@ public class StudentController {
         return "list";
     }
     
+    
+    @GetMapping("/dangki")
+    public String dangki(Model model) {
+        model.addAttribute("subs",subService.findAll());
+        return "dangki";
+    }
+    
+    
+    //xoa mon hoc da dang ki
+    @RequestMapping(value = "/sub/{id}/xoa/{idsub}") 
+    public String xoa(@PathVariable(value="id") int id,@PathVariable(value="idsub") int idsub, Model model, RedirectAttributes redirect) {
+    	Student st = studentService.findOne(id);
+    	Subj sub = subService.findOne(idsub);
+    	st.getSubj().remove(sub);
+    	studentService.save(st);
+    	redirect.addFlashAttribute("success", "Deleted successfully!");
+    	return "redirect:/student/"+id+"/dangki";
+    }
    
 
 }

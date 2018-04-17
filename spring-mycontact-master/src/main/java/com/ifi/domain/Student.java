@@ -60,7 +60,7 @@ public class Student implements Serializable {
 		super();
 	}
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
    	@JoinTable(name = "lienket", joinColumns = {
    			@JoinColumn(name = "id") }, inverseJoinColumns = {
    					@JoinColumn(name = "idsub") })

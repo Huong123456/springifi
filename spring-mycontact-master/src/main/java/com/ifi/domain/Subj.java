@@ -30,10 +30,7 @@ public class Subj implements Serializable {
 	private String giaovien;
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "subj")
-	private Set<Student> student;
-	
-	
-	
+	private Set<Student> student;	
 
 //	public List<Subj> getSubj() {
 //		return subj;
